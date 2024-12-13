@@ -47,6 +47,7 @@ yarn install
 
 ```env
 GOOGLE_GENERATIVE_AI_API_KEY=your_api_key_here
+FIRECRAWL_API_KEY=
 ```
 
 4. Run the development server:
