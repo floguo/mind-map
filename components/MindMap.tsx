@@ -115,14 +115,9 @@ export default function MindMap({ data, onNodeClick }: MindMapProps) {
           <FileUp className="h-12 w-12 text-zinc-300 mx-auto mb-6" />
           <h3 className="text-xl font-medium">No Mind Map Yet</h3>
           <p className="text-sm text-zinc-400 pb-4">
-            Upload a PDF to generate an interactive mind map of its key concepts.
+            Upload a PDF or Enter a URL to generate an interactive mind map of its key concepts.
           </p>
-          <Button 
-            onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })} 
-            className="font-mono bg-zinc-100 text-zinc-800 shadow-none hover:bg-zinc-200 duration-200"
-          >
-            Upload File
-          </Button>
+          
         </div>
       </div>
     )

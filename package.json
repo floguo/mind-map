@@ -12,6 +12,7 @@
     "@ai-sdk/anthropic": "^0.0.56",
     "@ai-sdk/google": "^0.0.55",
     "@ai-sdk/openai": "^0.0.72",
+    "@mendable/firecrawl-js": "^1.9.3",
     "@radix-ui/react-label": "^2.1.0",
     "@radix-ui/react-progress": "^1.1.0",
     "@radix-ui/react-radio-group": "^1.2.1",

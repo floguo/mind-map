@@ -1,12 +1,33 @@
 import { pdfExtractSchema } from "@/lib/schemas";
 import { google } from "@ai-sdk/google";
 import { streamObject } from "ai";
+import FirecrawlApp from '@mendable/firecrawl-js';
 
 export const maxDuration = 60;
 
 export async function POST(req: Request) {
-  const { files } = await req.json();
-  const firstFile = files[0].data;
+  const { files, url } = await req.json();
+  
+  let content = '';
+  
+  if (url) {
+    const app = new FirecrawlApp({ apiKey: process.env.FIRECRAWL_API_KEY! });
+    
+    const scrapeResponse = await app.scrapeUrl(url, {
+      formats: ['markdown'],
+    });
+
+    if (!scrapeResponse.success) {
+      throw new Error(`Failed to scrape: ${scrapeResponse.error}`);
+    }
+
+    content = scrapeResponse.markdown ?? '';
+    console.log(content);
+  } else if (files && files.length > 0) {
+    content = files[0]?.data ?? '';
+  } else {
+    throw new Error('No content provided');
+  }
 
   const result = await streamObject({
     model: google("gemini-1.5-pro-latest"),
@@ -14,19 +35,20 @@ export async function POST(req: Request) {
       {
         role: "system",
         content:
-          "You are a document analyzer. Extract the most important points from the provided PDF document. Focus on key information, main ideas, and significant details.",
+          "You are a document analyzer. Extract the most important points from the provided document. Focus on key information, main ideas, and significant details.",
       },
       {
         role: "user",
         content: [
           {
             type: "text",
-            text: "Please read this PDF and extract the key points. Include relevant context where helpful.",
+            text: url 
+              ? "Please analyze this webpage content and extract the key points. Include relevant context where helpful."
+              : "Please read this PDF and extract the key points. Include relevant context where helpful.",
           },
           {
-            type: "file",
-            data: firstFile,
-            mimeType: "application/pdf",
+            type: "text",
+            text: content,
           },
         ],
       },
